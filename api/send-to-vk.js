@@ -51,7 +51,7 @@ export default async function handler(req, res) {
                 message: message,
                 random_id: Math.floor(Math.random() * 2147483647),
                 // ⚠️ СЮДА ВСТАВЬТЕ НОВЫЙ ТОКЕН (с правами messages и offline)
-                access_token: 'vk1.a.-36omM8FL7-Q5qA2uT41kwlLDA-L02MlU7EUS4QZt17pNguK5FEILvLi6nYWiyphUsnnkRWsMdmUxHKtJS6A9B8ci1LMVuCDKCHXEfSxB642rPGM0UYd8AWqJfUQVh1FuS8cnLaPRNF_qo3CpPMw98BKbIRKE2XXV8LtvQC7uyXl8vWHxjJ5MUn1wHtKvBoMG2AdK3dL-NBajhgD5d7Zwg',
+                access_token: 'vk1.a.riHwFE7Ju_gmbChcQSbUin3Amnr8NhtpjEk-qeBOp-KaaSbOz-Isz73vJiL5TvuBgAe1FEjTgppKRCMqNqh_VI4hnVWX7LKn7s24RHKG-ypztLAvFLcaT6cd1s3OotRnMJE8f1VdIoM75K6zwDd4O9PCc7T4mZr19X22cg5PrijsIbozWWescoL27GvEW3K6Dv_UrmAOKbeglapisVcSJA',
                 v: '5.131'
             })
         });
