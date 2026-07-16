@@ -37,6 +37,9 @@ export default async function handler(req, res) {
         message += `🕐 Дата: ${new Date().toLocaleString('ru-RU')}\n`;
         message += `🌐 Источник: Сайт Verve`;
 
+        // Ваш числовой ID
+        const VK_USER_ID = '312306507';
+
         // Отправка в VK API
         const response = await fetch('https://api.vk.com/method/messages.send', {
             method: 'POST',
@@ -44,10 +47,11 @@ export default async function handler(req, res) {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-                user_id: '312306507',      // ваш числовой ID
+                user_id: VK_USER_ID,
                 message: message,
                 random_id: Math.floor(Math.random() * 2147483647),
-                access_token: 'vk1.a.-36omM8FL7-Q5qA2uT41kwlLDA-L02MlU7EUS4QZt17pNguK5FEILvLi6nYWiyphUsnnkRWsMdmUxHKtJS6A9B8ci1LMVuCDKCHXEfSxB642rPGM0UYd8AWqJfUQVh1FuS8cnLaPRNF_qo3CpPMw98BKbIRKE2XXV8LtvQC7uyXl8vWHxjJ5MUn1wHtKvBoMG2AdK3dL-NBajhgD5d7Zwg',  // токен сообщества
+                // ⚠️ СЮДА ВСТАВЬТЕ НОВЫЙ ТОКЕН (с правами messages и offline)
+                access_token: 'vk1.a.-36omM8FL7-Q5qA2uT41kwlLDA-L02MlU7EUS4QZt17pNguK5FEILvLi6nYWiyphUsnnkRWsMdmUxHKtJS6A9B8ci1LMVuCDKCHXEfSxB642rPGM0UYd8AWqJfUQVh1FuS8cnLaPRNF_qo3CpPMw98BKbIRKE2XXV8LtvQC7uyXl8vWHxjJ5MUn1wHtKvBoMG2AdK3dL-NBajhgD5d7Zwg',
                 v: '5.131'
             })
         });
@@ -58,16 +62,17 @@ export default async function handler(req, res) {
             return res.status(200).json({ success: true });
         } else {
             console.error('VK API Error:', result);
+            // Возвращаем текст реальной ошибки от VK
             return res.status(500).json({ 
                 success: false, 
-                error: 'Ошибка отправки в VK' 
+                error: result.error ? result.error.error_msg : 'Ошибка отправки в VK' 
             });
         }
     } catch (error) {
         console.error('Server Error:', error);
         return res.status(500).json({ 
             success: false, 
-            error: 'Внутренняя ошибка сервера' 
+            error: 'Внутренняя ошибка сервера: ' + error.message 
         });
     }
 }
