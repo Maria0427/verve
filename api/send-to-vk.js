@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-    // CORS заголовки
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -15,7 +14,6 @@ export default async function handler(req, res) {
     try {
         const { name, phone, contact_method, email, tariff } = req.body;
 
-        // Валидация
         if (!name || !phone || !contact_method || !tariff) {
             return res.status(400).json({ 
                 success: false, 
@@ -23,24 +21,19 @@ export default async function handler(req, res) {
             });
         }
 
-        // Формируем сообщение
         let message = `📋 Новая заявка с сайта Verve\n\n`;
         message += `👤 Имя: ${name}\n`;
         message += `📱 Телефон: ${phone}\n`;
         message += `📨 Способ связи: ${contact_method}\n`;
-        
         if (contact_method === 'email' && email) {
             message += `📧 Email: ${email}\n`;
         }
-        
         message += `💎 Тариф: ${tariff}\n`;
         message += `🕐 Дата: ${new Date().toLocaleString('ru-RU')}\n`;
         message += `🌐 Источник: Сайт Verve`;
 
-        // Ваш числовой ID
         const VK_USER_ID = '312306507';
 
-        // Отправка в VK API
         const response = await fetch('https://api.vk.com/method/messages.send', {
             method: 'POST',
             headers: {
@@ -50,8 +43,8 @@ export default async function handler(req, res) {
                 user_id: VK_USER_ID,
                 message: message,
                 random_id: Math.floor(Math.random() * 2147483647),
-                // ⚠️ СЮДА ВСТАВЬТЕ НОВЫЙ ТОКЕН (с правами messages и offline)
-                access_token: 'vk1.a.riHwFE7Ju_gmbChcQSbUin3Amnr8NhtpjEk-qeBOp-KaaSbOz-Isz73vJiL5TvuBgAe1FEjTgppKRCMqNqh_VI4hnVWX7LKn7s24RHKG-ypztLAvFLcaT6cd1s3OotRnMJE8f1VdIoM75K6zwDd4O9PCc7T4mZr19X22cg5PrijsIbozWWescoL27GvEW3K6Dv_UrmAOKbeglapisVcSJA',
+                // Токен берется из секретных настроек Vercel, а не из кода!
+                access_token: process.env.VK_ACCESS_TOKEN, 
                 v: '5.131'
             })
         });
@@ -61,11 +54,18 @@ export default async function handler(req, res) {
         if (result.response) {
             return res.status(200).json({ success: true });
         } else {
-            console.error('VK API Error:', result);
-            // Возвращаем текст реальной ошибки от VK
+            console.error('VK API Full Response:', JSON.stringify(result));
+            
+            let errorMsg = 'Ошибка отправки в VK';
+            if (result.error && typeof result.error === 'object' && result.error.error_msg) {
+                errorMsg = result.error.error_msg;
+            } else if (result.error && typeof result.error === 'string') {
+                errorMsg = result.error;
+            }
+            
             return res.status(500).json({ 
                 success: false, 
-                error: result.error ? result.error.error_msg : 'Ошибка отправки в VK' 
+                error: errorMsg
             });
         }
     } catch (error) {
