@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Verve — Онлайн-студия здорового тела</title>
+    
+    <!-- ===== ПОДКЛЮЧЕНИЕ ШРИФТОВ (Bodoni Moda и Montserrat) ===== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    
+    <style>
+        /* ===== Базовые стили ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5ede3;
+            color: #3d2415;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* ===== Анимации ===== */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(107, 66, 38, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(107, 66, 38, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(107, 66, 38, 0);
+            }
+        }
+
+        .btn-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            will-change: opacity, transform;
+        }
+
+        .fade-in-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== Хедер ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(245, 237, 227, 0.92);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 2px 20px rgba(61, 36, 21, 0.06);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Bodoni Moda', serif;
+            font-weight: 700;
+            font-size: 1.9rem;
+            letter-spacing: 4px;
+            color: #5c3d2e;
+            text-transform: uppercase;
+        }
+        .logo i {
+            margin-right: 8px;
+            color: #6b4226;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            color: #3d2415;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #6b4226;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #6b4226;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #3d2415;
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            height: 100vh;
+            min-height: 200px;
+            background:
+                linear-gradient(135deg, rgba(245, 237, 227, 0.55) 0%, rgba(232, 220, 204, 0.6) 100%),
+                url('https://sun9-41.userapi.com/s/v1/ig2/6LwDtDmB9NkQkdaiXlPmtVXkwPpxqEy3-0_vA_qf7pyoQQF6pWFdR4CnT7ihf-a3KqL5jkoDlfPBn3Cmqwl86ZVq.jpg?quality=95&crop=0,1,1280,720&as=32x18,48x27,72x40,108x61,160x90,240x135,360x202,480x270,540x304,640x360,720x405,1080x607,1280x720&from=bu&u=dCINmw1BSzqSsV_rer3JtAUhGSWCoU1s3_8c9GJ8_1g&cs=1280x0') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #3d2415;
+            padding-top: 70px;
+        }
+
+        .hero-content {
+            max-width: 820px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-weight: 700;
+            font-size: 3.4rem;
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
+            color: #3d2415;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            color: #6b4226;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            color: #5a3d2a;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #6b4226;
+            color: #f5ede3;
+            padding: 1rem 2.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 10px 30px rgba(107, 66, 38, 0.25);
+            transition: all 0.4s;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background: #4d2f1e;
+            transform: translateY(-3px);
+            box-shadow: 0 18px 35px rgba(107, 66, 38, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #6b4226;
+            color: #6b4226;
+            padding: 0.8rem 2.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background: #6b4226;
+            color: #f5ede3;
+        }
+
+        .hero-badge {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-badge-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(6px);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #3d2415;
+            border: 1px solid rgba(107, 66, 38, 0.12);
+        }
+
+        .hero-badge-item i {
+            color: #6b4226;
+            font-size: 1.1rem;
+        }
+
+        /* ===== Секции ===== */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            font-family: 'Bodoni Moda', serif;
+            text-align: center;
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #3d2415;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #6b4226;
+            margin: 0.8rem auto 0;
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #6b5a4a;
+            font-size: 1.1rem;
+            margin-bottom: 3.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== About ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3.5rem;
+            align-items: center;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(61, 36, 21, 0.12);
+        }
+
+        .about-text h3 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            color: #3d2415;
+        }
+
+        .about-text h3 i {
+            color: #6b4226;
+            margin-right: 8px;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            color: #5a3d2a;
+        }
+
+        .about-text .highlight {
+            color: #6b4226;
+            font-weight: 600;
+        }
+
+        .trainer-block {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            margin-top: 1.8rem;
+            padding: 1.2rem 1.8rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            border-left: 4px solid #6b4226;
+        }
+
+        .trainer-block img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #dccfc0;
+        }
+
+        .trainer-block .trainer-name {
+            font-family: 'Bodoni Moda', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #3d2415;
+        }
+
+        .trainer-block .trainer-role {
+            font-size: 0.95rem;
+            color: #6b5a4a;
+        }
+
+        /* ===== НОВЫЙ БЛОК ПРОГРАММ ===== */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .program-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 2.5rem 1.8rem;
+            box-shadow: 0 10px 35px rgba(61, 36, 21, 0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(107, 66, 38, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .program-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 45px rgba(61, 36, 21, 0.1);
+        }
+
+        .program-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.6rem;
+            color: #3d2415;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .program-title small {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+            color: #6b5a4a;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .program-card h4 {
+            font-weight: 600;
+            color: #3d2415;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .program-list {
+            list-style: none;
+            margin-bottom: 1.2rem;
+            padding-left: 0;
+        }
+
+        .program-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            color: #4d3a2a;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .program-list li i {
+            color: #6b4226;
+            width: 20px;
+            margin-top: 0.15rem;
+            flex-shrink: 0;
+        }
+
+        .program-desc {
+            color: #5a3d2a;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-style: italic;
+            padding-top: 0.8rem;
+            border-top: 1px solid rgba(107, 66, 38, 0.08);
+            margin-top: auto;
+        }
+
+        .program-footer {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 3.5rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(107, 66, 38, 0.1);
+            border-bottom: 1px solid rgba(107, 66, 38, 0.1);
+            color: #3d2415;
+            line-height: 1.8;
+        }
+
+        /* ===== Pricing ===== */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 2.5rem 1.8rem;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(61, 36, 21, 0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(107, 66, 38, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(61, 36, 21, 0.1);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid #6b4226;
+            transform: scale(1.03);
+            box-shadow: 0 20px 45px rgba(107, 66, 38, 0.15);
+            background: #faf5ee;
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.03) translateY(-6px);
+        }
+
+        .pricing-card h3 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: #3d2415;
+        }
+
+        .price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #6b4226;
+            margin: 1rem 0;
+            line-height: 1.2;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin: 1.5rem 0;
+            text-align: left;
+            padding-left: 0.5rem;
+            flex-grow: 1;
+        }
+
+        .pricing-card ul li {
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            color: #4d3a2a;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .pricing-card ul li i {
+            color: #6b4226;
+            width: 20px;
+            margin-top: 0.15rem;
+            flex-shrink: 0;
+        }
+
+        .pricing-card .btn,
+        .pricing-card .btn-outline {
+            margin-top: 0.5rem;
+            align-self: center;
+        }
+
+        /* ===== Contact ===== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2.8rem;
+            box-shadow: 0 10px 35px rgba(61, 36, 21, 0.06);
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.4rem;
+            color: #3d2415;
+        }
+
+        .contact-info-item i {
+            font-size: 1.3rem;
+            color: #6b4226;
+            width: 28px;
+            text-align: center;
+        }
+
+        .contact-info .social-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .vk-btn {
+            background: #2787F5;
+        }
+
+        .telegram-btn {
+            background: #2AABEE;
+        }
+
+        /* ===== ФОРМА С ВАЛИДАЦИЕЙ И МАСКАМИ ===== */
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.2rem;
+            border: 1.5px solid #e8dccc;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: #faf7f2;
+            transition: border 0.3s, box-shadow 0.3s;
+            color: #3d2415;
+        }
+        
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            border-color: #6b4226;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(107, 66, 38, 0.08);
+        }
+
+        .contact-form .phone-input-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin-bottom: 1.2rem;
+        }
+
+        .contact-form .phone-input-wrapper .flag {
+            position: absolute;
+            left: 15px;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+
+        .contact-form .phone-input-wrapper input {
+            padding-left: 50px;
+            margin-bottom: 0;
+        }
+
+        .contact-form .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-form .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            color: #3d2415;
+            font-size: 1rem;
+        }
+
+        .contact-form .radio-group input[type="radio"],
+        .contact-form .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #6b4226;
+            cursor: pointer;
+        }
+
+        .hidden-email {
+            display: none !important;
+        }
+
+        .contact-form .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-form .checkbox-group label {
+            font-size: 0.9rem;
+            color: #5a3d2a;
+            cursor: pointer;
+        }
+
+        .contact-form button {
+            width: 100%;
+            background: #6b4226;
+            color: #f5ede3;
+            border: none;
+            padding: 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .contact-form button:hover {
+            background: #4d2f1e;
+            transform: translateY(-2px);
+        }
+
+        /* Стили для ошибок валидации */
+        .contact-form .error-message {
+            color: #c0392b;
+            font-size: 0.85rem;
+            margin-top: -0.7rem;
+            margin-bottom: 0.8rem;
+            display: none;
+            font-weight: 500;
+        }
+
+        .contact-form .error-message.visible {
+            display: block;
+        }
+
+        .contact-form input.error,
+        .contact-form select.error {
+            border-color: #c0392b;
+            box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.08);
+        }
+
+        .contact-form .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 14px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .contact-form .success-message.visible {
+            display: block;
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            background: #2d1f14;
+            color: #cbb8a8;
+            padding: 2.5rem 0;
+            text-align: center;
+        }
+
+        footer .social-links a {
+            margin: 0 14px;
+            font-size: 1.6rem;
+            color: #b09b8a;
+            transition: color 0.3s;
+        }
+
+        footer .social-links a:hover {
+            color: #f5ede3;
+        }
+
+        footer p {
+            margin-top: 1.2rem;
+            font-size: 0.95rem;
+            color: #a08b7a;
+        }
+
+        /* ===== Адаптив ===== */
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .about-image {
+                order: -1;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(245, 237, 227, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: center;
+                gap: 1.6rem;
+                padding: 2.5rem 0;
+                transform: translateY(-150%);
+                transition: transform 0.4s ease;
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.05rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-6px);
+            }
+
+            .hero-badge {
+                gap: 1rem;
+            }
+
+            .hero-badge-item {
+                font-size: 0.85rem;
+                padding: 0.4rem 1.2rem;
+            }
+
+            .trainer-block {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .contact-grid {
+                padding: 1.5rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .programs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .btn {
+                padding: 0.8rem 1.8rem;
+                font-size: 0.95rem;
+            }
+
+            .pricing-card {
+                padding: 1.8rem 1.2rem;
+            }
+
+            .price {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-leaf"></i> Verve
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#programs">Направления</a></li>
+                <li><a href="#pricing">Прайс</a></li>
+                <li><a href="#contact">Запись</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Онлайн-студия для вашего <span>здорового тела</span> и <span>стройной фигуры</span></h1>
+            <p>Видеотренировки с тренером Натали — занимайтесь в удобное время, где бы вы ни находились.</p>
+            <a href="#contact" class="btn btn-pulse">Записаться на занятие</a>
+            <div class="hero-badge">
+                <span class="hero-badge-item"><i class="fas fa-video"></i> Видеотренировки</span>
+                <span class="hero-badge-item"><i class="fas fa-calendar-alt"></i> Удобный график</span>
+                <span class="hero-badge-item"><i class="fas fa-user"></i> Тренер Натали</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section id="about" style="background: #faf5ee;">
+        <div class="container fade-in-section">
+            <h2 class="section-title">О нас</h2>
+            <p class="section-subtitle">Verve — это онлайн-пространство, где забота о теле становится ежедневной привычкой</p>
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="https://sun9-84.userapi.com/s/v1/ig2/QyOlLqjJgmiqJPh_cnZ5tjVo5CNzUiejKDPirTHn9_-BkOGXpKFB-t5CfzZ_F0Q_poKFX3xjiZIuhnXlpnJQEE2u.jpg?quality=95&crop=19,0,1240,698&as=32x18,48x27,72x41,108x61,160x90,240x135,360x203,480x270,540x304,640x360,720x405,1080x608,1240x698&from=bu&u=OKR-kwrZ-5ULg_6T4SZjYNkzJD4n4wMSyu72U3NI8Uw&cs=1240x0" alt="Занятие растяжкой" />
+                </div>
+                <div class="about-text">
+                    <h3><i class="fas fa-heart" style="color:#6b4226;"></i> Здоровое тело — это просто</h3>
+                    <p>
+                        Мы создали <span class="highlight">Verve</span> для тех, кто ценит своё время и хочет заниматься
+                        в комфортном ритме. Все тренировки записаны в высоком качестве — вы можете выполнять их
+                        в любое удобное время, без привязки к расписанию.
+                    </p>
+                    <p>
+                        Наш подход основан на мягкой, но эффективной методике: сочетание силовых упражнений,
+                        растяжки и дыхательных практик помогает укрепить мышцы, улучшить гибкость и обрести
+                        лёгкость в теле.
+                    </p>
+
+                    <div class="trainer-block">
+                        <img src="https://sun9-43.userapi.com/s/v1/ig2/S-nvfkXRDK4kYdtI8g8pstj1RsDRfmMhPF4zobNa5UCpECzfTZOxRZRI2rF92_VK1LH_MfvmMCfYqRUBdUz8Jvtk.jpg?quality=95&as=32x43,48x64,72x96,108x144,160x213,240x320,360x480,480x640,540x720,640x853,720x960,1080x1440,1280x1707,1440x1920,1920x2560&from=bu&cs=1280x0" alt="Наталья Бельденкова" />
+                        <div>
+                            <div class="trainer-name">Наталья Бельденкова</div>
+                            <div class="trainer-role">Основательница Verve, тренер по фитнесу и стретчингу</div>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1rem;">
+                        <span class="highlight">Наша миссия</span> — сделать здоровое тело доступным каждому,
+                        независимо от уровня подготовки. Выбирайте программу, которая подходит именно вам,
+                        и двигайтесь к своей лучшей версии.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== НОВЫЙ БЛОК: НАПРАВЛЕНИЯ ===== -->
+    <section id="programs" style="background: #f5ede3;">
+        <div class="container fade-in-section">
+            <h2 class="section-title">Наши направления</h2>
+            <p class="section-subtitle">Три программы, чтобы вернуть телу свободу, гибкость и силу</p>
+            
+            <div class="programs-grid">
+                <!-- 1. Растяжка -->
+                <div class="program-card">
+                    <div>
+                        <div class="program-title">
+                            РАСТЯЖКА <small>Stretching</small>
+                        </div>
+                        <h4>Что входит:</h4>
+                        <ul class="program-list">
+                            <li><i class="fas fa-check-circle"></i> 3 блока тренировок.</li>
+                            <li><i class="fas fa-check-circle"></i> Статические и динамические упражнения на все группы мышц, суставная гимнастика, дыхательные техники для углубления растяжки.</li>
+                            <li><i class="fas fa-check-circle"></i> Акцент на мышцы спины, задней поверхности бедра, грудного отдела и шеи.</li>
+                        </ul>
+                    </div>
+                    <div class="program-desc">
+                        «Растяжка — это диалог с телом. Она возвращает мышцам эластичность, суставам — подвижность, а уму — спокойствие. Регулярная практика снимает утреннюю скованность, улучшает кровоток и помогает чувствовать лёгкость в каждом движении. Это не про боль, а про осознанное возвращение себе природной гибкости.»
+                    </div>
+                </div>
+
+                <!-- 2. МФР -->
+                <div class="program-card">
+                    <div>
+                        <div class="program-title">
+                            МФР <small>Myofascial Release</small>
+                        </div>
+                        <h4>Что входит:</h4>
+                        <ul class="program-list">
+                            <li><i class="fas fa-check-circle"></i> 3 блока тренировок.</li>
+                            <li><i class="fas fa-check-circle"></i> Работа с валиком (роллами), мячами и другим инвентарём для снятия напряжения в мышцах.</li>
+                            <li><i class="fas fa-check-circle"></i> Включает самомассаж триггерных точек, техники прокатки и точечного воздействия на глубокие слои тканей.</li>
+                        </ul>
+                    </div>
+                    <div class="program-desc">
+                        «МФР — это мягкое освобождение от зажимов, которые копятся годами. Мы не просто разминаем мышцы, мы убираем «комки» стресса и восстанавливаем нормальный тонус. После сеанса тело становится пластичнее, движения — свободнее, а боль уходит, потому что исчезает её первопричина — спазм.»
+                    </div>
+                </div>
+
+                <!-- 3. Здоровая спина -->
+                <div class="program-card">
+                    <div>
+                        <div class="program-title">
+                            ЗДОРОВАЯ СПИНА <small>Healthy Spine</small>
+                        </div>
+                        <h4>Что входит:</h4>
+                        <ul class="program-list">
+                            <li><i class="fas fa-check-circle"></i> 2 блока тренировок.</li>
+                            <li><i class="fas fa-check-circle"></i> Комплексный подход: укрепление мышечного корсета, коррекция осанки, профилактика остеохондроза, упражнения на стабилизацию позвоночника.</li>
+                        </ul>
+                    </div>
+                    <div class="program-desc">
+                        «Здоровая спина — это фундамент активной жизни. Без боли, без хруста, без ограничений. Мы учим вас правильно держать позвоночник в быту, укреплять глубокие мышцы-стабилизаторы и снимать нагрузку после долгого сидения. Это не временное облегчение, а пожизненная инвестиция в вашу подвижность и энергию.»
+                    </div>
+                </div>
+            </div>
+
+            <!-- Итоговый слоган -->
+            <div class="program-footer">
+                Растяжка → дарит гибкость.<br>
+                МФР → убирает зажимы и отёки.<br>
+                Здоровая спина → создаёт фундамент.<br>
+                <strong style="color: #6b4226;">Вместе они дают телу полную свободу.</strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PRICING ===== -->
+    <section id="pricing" style="background: #f5ede3;">
+        <div class="container fade-in-section">
+            <h2 class="section-title">Прайс</h2>
+            <p class="section-subtitle">Выберите свой тариф — от пробного до полного сопровождения</p>
+            <div class="pricing-grid">
+                <!-- Пробный тариф -->
+                <div class="pricing-card">
+                    <h3>Пробный тариф</h3>
+                    <div class="price">1 000 ₽</div>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Пробные 3 видео тренировки</li>
+                        <li><i class="fas fa-check-circle"></i> Telegram-канал на 3 месяца</li>
+                        <li><i class="fas fa-check-circle"></i> Любое направление на выбор</li>
+                    </ul>
+                    <a href="#contact" class="btn-outline">Записаться</a>
+                </div>
+
+                <!-- Тариф Mini -->
+                <div class="pricing-card">
+                    <h3>Тариф Mini</h3>
+                    <div class="price">1 500 ₽</div>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Любое 1 направление на выбор</li>
+                        <li><i class="fas fa-check-circle"></i> Все тренировки из выбранного направления</li>
+                        <li><i class="fas fa-check-circle"></i> Доступ навсегда</li>
+                    </ul>
+                    <a href="#contact" class="btn-outline">Выбрать</a>
+                </div>
+
+                <!-- Базовый тариф -->
+                <div class="pricing-card">
+                    <h3>Базовый тариф</h3>
+                    <div class="price">2 500 ₽</div>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Доступ к 2 направлениям</li>
+                        <li><i class="fas fa-check-circle"></i> Доступ 24/7</li>
+                        <li><i class="fas fa-check-circle"></i> Чат с тренером</li>
+                    </ul>
+                    <a href="#contact" class="btn-outline">Выбрать</a>
+                </div>
+
+                <!-- Полный доступ -->
+                <div class="pricing-card featured">
+                    <h3>Полный доступ</h3>
+                    <div class="price">4 000 ₽</div>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Доступ ко всем направлениям</li>
+                        <li><i class="fas fa-check-circle"></i> Канал с новыми мини-тренировками и питанием</li>
+                        <li><i class="fas fa-check-circle"></i> Чек-лист по питанию</li>
+                        <li><i class="fas fa-check-circle"></i> Персональные рекомендации</li>
+                        <li><i class="fas fa-check-circle"></i> Индивидуальное ведение</li>
+                    </ul>
+                    <a href="#contact" class="btn">Выбрать</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" style="background: #faf5ee;">
+        <div class="container fade-in-section">
+            <h2 class="section-title">Запись на занятие</h2>
+            <p class="section-subtitle">Оставьте заявку, и мы пришлём вам ссылку на пробную тренировку</p>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-info-item">
+                        <i class="fas fa-phone-alt"></i> +7 (908) 950-40-56
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <p style="font-weight: 600; margin-bottom: 0.6rem; color: #3d2415;">
+                            Быстрая запись через соцсети:
+                        </p>
+                        <div class="social-buttons">
+                            <a href="https://vk.com/nata7_b" target="_blank" class="social-btn vk-btn">
+                                <i class="fab fa-vk"></i> Написать в VK
+                            </a>
+                            <a href="https://t.me/natalya_bld" target="_blank" class="social-btn telegram-btn">
+                                <i class="fab fa-telegram-plane"></i> Написать в Telegram
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== ФОРМА С ВАЛИДАЦИЕЙ И МАСКАМИ ===== -->
+                <form class="contact-form" id="contactForm" novalidate>
+                    <p style="margin-bottom: 20px; color: #5a3d2a; font-size: 0.95rem; line-height: 1.5;">
+                        Оставьте Ваши данные, и администратор с удовольствием расскажет вам о всех подробностях акции!
+                    </p>
+
+                    <!-- Имя -->
+                    <input type="text" id="name" placeholder="Ваше имя" required />
+                    <div class="error-message" id="nameError">Пожалуйста, укажите ваше имя</div>
+
+                    <!-- Телефон с маской -->
+                    <div class="phone-input-wrapper">
+                        <span class="flag">🇷🇺</span>
+                        <input type="tel" id="phone" placeholder="+7 (000) 000-00-00" required />
+                    </div>
+                    <div class="error-message" id="phoneError">Введите полный номер в формате +7 (XXX) XXX-XX-XX (10 цифр после +7)</div>
+
+                    <!-- Способ связи -->
+                    <div style="font-weight: 600; margin-bottom: 0.8rem; color: #3d2415;">Как с Вами связаться</div>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="contact_method" value="email" required /> Почта
+                        </label>
+                        <label>
+                            <input type="radio" name="contact_method" value="max" /> MAX
+                        </label>
+                        <label>
+                            <input type="radio" name="contact_method" value="telegram" /> Telegram
+                        </label>
+                    </div>
+                    <div class="error-message" id="methodError">Выберите способ связи</div>
+
+                    <!-- Почта с маской (появляется при выборе "Почта") -->
+                    <input type="email" id="email-field" class="hidden-email" placeholder="example@mail.ru" />
+                    <div class="error-message" id="emailError">Введите корректный адрес электронной почты</div>
+
+                    <!-- Тариф -->
+                    <select id="tariff" required>
+                        <option value="">Выберите тариф</option>
+                        <option value="Пробный тариф">Пробный тариф</option>
+                        <option value="Тариф Mini">Тариф Mini</option>
+                        <option value="Базовый тариф">Базовый тариф</option>
+                        <option value="Полный доступ">Полный доступ</option>
+                    </select>
+                    <div class="error-message" id="tariffError">Пожалуйста, выберите тариф</div>
+
+                    <!-- Согласие -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="consent" required />
+                        <label for="consent">
+                            Я даю согласие на обработку персональных данных в соответствии с 
+                            <a href="#" style="color: #6b4226; text-decoration: underline;">политикой конфиденциальности</a>
+                        </label>
+                    </div>
+                    <div class="error-message" id="consentError">Необходимо дать согласие на обработку данных</div>
+
+                    <button type="submit">Записаться</button>
+                    
+                    <!-- Сообщение об успехе -->
+                    <div class="success-message" id="successMessage">
+                        ✅ Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://vk.com/nata7_b"><i class="fab fa-vk"></i></a>
+                <a href="https://t.me/natalya_bld"><i class="fab fa-telegram-plane"></i></a>
+            </div>
+            <p>&copy; 2026 Verve — онлайн-студия для здорового тела и стройной фигуры. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPT С МАСКАМИ ===== -->
+    <script>
+        // ==============================
+        // 1. Мобильное меню
+        // ==============================
+        const menuToggle = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // ==============================
+        // 2. Плавный скролл
+        // ==============================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ==============================
+        // 3. Анимация появления
+        // ==============================
+        const fadeSections = document.querySelectorAll('.fade-in-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeSections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // ==============================
+        // 4. Динамическое поле почты
+        // ==============================
+        const radioMethods = document.querySelectorAll('input[name="contact_method"]');
+        const emailField = document.getElementById('email-field');
+
+        function toggleEmailField() {
+            const selected = document.querySelector('input[name="contact_method"]:checked');
+            if (selected && selected.value === 'email') {
+                emailField.classList.remove('hidden-email');
+                emailField.setAttribute('required', 'required');
+            } else {
+                emailField.classList.add('hidden-email');
+                emailField.removeAttribute('required');
+                emailField.value = '';
+            }
+        }
+
+        radioMethods.forEach(radio => {
+            radio.addEventListener('change', toggleEmailField);
+        });
+
+        toggleEmailField();
+
+        // ==============================
+        // 5. МАСКА ДЛЯ ТЕЛЕФОНА (улучшенная)
+        // ==============================
+        const phoneInput = document.getElementById('phone');
+
+        phoneInput.addEventListener('input', function(e) {
+            // Удаляем все не-цифры
+            let value = this.value.replace(/\D/g, '');
+            
+            // Если начинается с 8, заменяем на 7 (для российских номеров)
+            if (value.startsWith('8') && value.length > 0) {
+                value = '7' + value.slice(1);
+            }
+            
+            // Если не начинается с 7 и не пусто, добавляем 7 в начало
+            if (!value.startsWith('7') && value.length > 0) {
+                value = '7' + value;
+            }
+            
+            // Ограничиваем 11 цифрами
+            if (value.length > 11) {
+                value = value.slice(0, 11);
+            }
+            
+            // Форматируем
+            let formatted = '';
+            if (value.length > 0) {
+                formatted = '+7';
+                
+                if (value.length > 1) {
+                    formatted += ' (' + value.slice(1, 4);
+                }
+                if (value.length >= 5) {
+                    formatted += ') ' + value.slice(4, 7);
+                }
+                if (value.length >= 8) {
+                    formatted += '-' + value.slice(7, 9);
+                }
+                if (value.length >= 10) {
+                    formatted += '-' + value.slice(9, 11);
+                }
+            }
+            
+            this.value = formatted;
+            
+            // Убираем ошибку при вводе, если номер полный
+            const digits = this.value.replace(/\D/g, '');
+            if (digits.length === 11) {
+                document.getElementById('phoneError').classList.remove('visible');
+                this.classList.remove('error');
+            }
+        });
+
+        // Улучшенная валидация телефона
+        function isValidPhone(value) {
+            const digits = value.replace(/\D/g, '');
+            // Проверяем: 11 цифр, начинается с 7
+            return digits.length === 11 && digits.startsWith('7');
+        }
+
+        // ==============================
+        // 6. ВАЛИДАЦИЯ ФОРМЫ
+        // ==============================
+        const form = document.getElementById('contactForm');
+        const nameInput = document.getElementById('name');
+        const tariffSelect = document.getElementById('tariff');
+        const consentCheck = document.getElementById('consent');
+        const emailInput = document.getElementById('email-field');
+
+        // Элементы для ошибок
+        const nameError = document.getElementById('nameError');
+        const phoneError = document.getElementById('phoneError');
+        const methodError = document.getElementById('methodError');
+        const emailError = document.getElementById('emailError');
+        const tariffError = document.getElementById('tariffError');
+        const consentError = document.getElementById('consentError');
+        const successMessage = document.getElementById('successMessage');
+
+        // Вспомогательная функция для сброса ошибок
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('visible'));
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            successMessage.classList.remove('visible');
+        }
+
+        // Валидация email
+        function isValidEmail(value) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        }
+
+        // Обработчик отправки
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+
+            let isValid = true;
+
+            // 1. Имя
+            if (!nameInput.value.trim()) {
+                nameError.classList.add('visible');
+                nameInput.classList.add('error');
+                isValid = false;
+            }
+
+            // 2. Телефон
+            if (!isValidPhone(phoneInput.value.trim())) {
+                phoneError.classList.add('visible');
+                phoneInput.classList.add('error');
+                isValid = false;
+            }
+
+            // 3. Способ связи (выбран ли radio)
+            const selectedMethod = document.querySelector('input[name="contact_method"]:checked');
+            if (!selectedMethod) {
+                methodError.classList.add('visible');
+                isValid = false;
+            }
+
+            // 4. Почта (если выбран способ "Почта")
+            if (selectedMethod && selectedMethod.value === 'email') {
+                if (!isValidEmail(emailInput.value.trim())) {
+                    emailError.classList.add('visible');
+                    emailInput.classList.add('error');
+                    isValid = false;
+                }
+            }
+
+            // 5. Тариф
+            if (!tariffSelect.value) {
+                tariffError.classList.add('visible');
+                tariffSelect.classList.add('error');
+                isValid = false;
+            }
+
+            // 6. Согласие
+            if (!consentCheck.checked) {
+                consentError.classList.add('visible');
+                isValid = false;
+            }
+
+            // Если всё ок — показываем успех
+            if (isValid) {
+                successMessage.classList.add('visible');
+                form.reset();
+                // Сбрасываем состояние почты
+                emailField.classList.add('hidden-email');
+                emailField.removeAttribute('required');
+                // Убираем выделение ошибок, если они были
+                document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+                // Сбрасываем radio (визуально)
+                radioMethods.forEach(r => r.checked = false);
+                // Очищаем поле телефона
+                phoneInput.value = '';
+                // Через 8 секунд скрываем сообщение
+                setTimeout(() => {
+                    successMessage.classList.remove('visible');
+                }, 8000);
+            }
+        });
+
+        // Очистка ошибок при вводе
+        nameInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                nameError.classList.remove('visible');
+                this.classList.remove('error');
+            }
+        });
+
+        tariffSelect.addEventListener('change', function() {
+            if (this.value) {
+                tariffError.classList.remove('visible');
+                this.classList.remove('error');
+            }
+        });
+
+        consentCheck.addEventListener('change', function() {
+            if (this.checked) {
+                consentError.classList.remove('visible');
+            }
+        });
+
+        emailInput.addEventListener('input', function() {
+            if (isValidEmail(this.value.trim())) {
+                emailError.classList.remove('visible');
+                this.classList.remove('error');
+            }
+        });
+
+        radioMethods.forEach(radio => {
+            radio.addEventListener('change', function() {
+                methodError.classList.remove('visible');
+                if (this.value !== 'email') {
+                    emailField.classList.add('hidden-email');
+                    emailField.removeAttribute('required');
+                    emailError.classList.remove('visible');
+                    emailInput.classList.remove('error');
+                } else {
+                    emailField.classList.remove('hidden-email');
+                    emailField.setAttribute('required', 'required');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
