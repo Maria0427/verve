@@ -1179,281 +1179,382 @@
         </div>
     </footer>
 
-    <!-- ===== SCRIPT С МАСКАМИ ===== -->
-    <script>
-        // ==============================
-        // 1. Мобильное меню
-        // ==============================
-        const menuToggle = document.getElementById('mobile-menu');
-        const navLinks = document.getElementById('nav-links');
+   <!-- ===== SCRIPT С МАСКАМИ И ОТПРАВКОЙ В VK ===== -->
+<script>
+    // ==============================
+    // 1. Мобильное меню
+    // ==============================
+    const menuToggle = document.getElementById('mobile-menu');
+    const navLinks = document.getElementById('nav-links');
 
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+    menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
         });
+    });
 
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-            });
-        });
-
-        // ==============================
-        // 2. Плавный скролл
-        // ==============================
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // ==============================
-        // 3. Анимация появления
-        // ==============================
-        const fadeSections = document.querySelectorAll('.fade-in-section');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        fadeSections.forEach(section => {
-            observer.observe(section);
-        });
-
-        // ==============================
-        // 4. Динамическое поле почты
-        // ==============================
-        const radioMethods = document.querySelectorAll('input[name="contact_method"]');
-        const emailField = document.getElementById('email-field');
-
-        function toggleEmailField() {
-            const selected = document.querySelector('input[name="contact_method"]:checked');
-            if (selected && selected.value === 'email') {
-                emailField.classList.remove('hidden-email');
-                emailField.setAttribute('required', 'required');
-            } else {
-                emailField.classList.add('hidden-email');
-                emailField.removeAttribute('required');
-                emailField.value = '';
-            }
-        }
-
-        radioMethods.forEach(radio => {
-            radio.addEventListener('change', toggleEmailField);
-        });
-
-        toggleEmailField();
-
-        // ==============================
-        // 5. МАСКА ДЛЯ ТЕЛЕФОНА (улучшенная)
-        // ==============================
-        const phoneInput = document.getElementById('phone');
-
-        phoneInput.addEventListener('input', function(e) {
-            // Удаляем все не-цифры
-            let value = this.value.replace(/\D/g, '');
-            
-            // Если начинается с 8, заменяем на 7 (для российских номеров)
-            if (value.startsWith('8') && value.length > 0) {
-                value = '7' + value.slice(1);
-            }
-            
-            // Если не начинается с 7 и не пусто, добавляем 7 в начало
-            if (!value.startsWith('7') && value.length > 0) {
-                value = '7' + value;
-            }
-            
-            // Ограничиваем 11 цифрами
-            if (value.length > 11) {
-                value = value.slice(0, 11);
-            }
-            
-            // Форматируем
-            let formatted = '';
-            if (value.length > 0) {
-                formatted = '+7';
-                
-                if (value.length > 1) {
-                    formatted += ' (' + value.slice(1, 4);
-                }
-                if (value.length >= 5) {
-                    formatted += ') ' + value.slice(4, 7);
-                }
-                if (value.length >= 8) {
-                    formatted += '-' + value.slice(7, 9);
-                }
-                if (value.length >= 10) {
-                    formatted += '-' + value.slice(9, 11);
-                }
-            }
-            
-            this.value = formatted;
-            
-            // Убираем ошибку при вводе, если номер полный
-            const digits = this.value.replace(/\D/g, '');
-            if (digits.length === 11) {
-                document.getElementById('phoneError').classList.remove('visible');
-                this.classList.remove('error');
-            }
-        });
-
-        // Улучшенная валидация телефона
-        function isValidPhone(value) {
-            const digits = value.replace(/\D/g, '');
-            // Проверяем: 11 цифр, начинается с 7
-            return digits.length === 11 && digits.startsWith('7');
-        }
-
-        // ==============================
-        // 6. ВАЛИДАЦИЯ ФОРМЫ
-        // ==============================
-        const form = document.getElementById('contactForm');
-        const nameInput = document.getElementById('name');
-        const tariffSelect = document.getElementById('tariff');
-        const consentCheck = document.getElementById('consent');
-        const emailInput = document.getElementById('email-field');
-
-        // Элементы для ошибок
-        const nameError = document.getElementById('nameError');
-        const phoneError = document.getElementById('phoneError');
-        const methodError = document.getElementById('methodError');
-        const emailError = document.getElementById('emailError');
-        const tariffError = document.getElementById('tariffError');
-        const consentError = document.getElementById('consentError');
-        const successMessage = document.getElementById('successMessage');
-
-        // Вспомогательная функция для сброса ошибок
-        function clearErrors() {
-            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('visible'));
-            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
-            successMessage.classList.remove('visible');
-        }
-
-        // Валидация email
-        function isValidEmail(value) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-        }
-
-        // Обработчик отправки
-        form.addEventListener('submit', function(e) {
+    // ==============================
+    // 2. Плавный скролл
+    // ==============================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            clearErrors();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
 
-            let isValid = true;
+    // ==============================
+    // 3. Анимация появления
+    // ==============================
+    const fadeSections = document.querySelectorAll('.fade-in-section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
 
-            // 1. Имя
-            if (!nameInput.value.trim()) {
-                nameError.classList.add('visible');
-                nameInput.classList.add('error');
+    fadeSections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // ==============================
+    // 4. Динамическое поле почты
+    // ==============================
+    const radioMethods = document.querySelectorAll('input[name="contact_method"]');
+    const emailField = document.getElementById('email-field');
+
+    function toggleEmailField() {
+        const selected = document.querySelector('input[name="contact_method"]:checked');
+        if (selected && selected.value === 'email') {
+            emailField.classList.remove('hidden-email');
+            emailField.setAttribute('required', 'required');
+        } else {
+            emailField.classList.add('hidden-email');
+            emailField.removeAttribute('required');
+            emailField.value = '';
+        }
+    }
+
+    radioMethods.forEach(radio => {
+        radio.addEventListener('change', toggleEmailField);
+    });
+
+    toggleEmailField();
+
+    // ==============================
+    // 5. МАСКА ДЛЯ ТЕЛЕФОНА (улучшенная)
+    // ==============================
+    const phoneInput = document.getElementById('phone');
+
+    phoneInput.addEventListener('input', function(e) {
+        // Удаляем все не-цифры
+        let value = this.value.replace(/\D/g, '');
+        
+        // Если начинается с 8, заменяем на 7 (для российских номеров)
+        if (value.startsWith('8') && value.length > 0) {
+            value = '7' + value.slice(1);
+        }
+        
+        // Если не начинается с 7 и не пусто, добавляем 7 в начало
+        if (!value.startsWith('7') && value.length > 0) {
+            value = '7' + value;
+        }
+        
+        // Ограничиваем 11 цифрами
+        if (value.length > 11) {
+            value = value.slice(0, 11);
+        }
+        
+        // Форматируем
+        let formatted = '';
+        if (value.length > 0) {
+            formatted = '+7';
+            
+            if (value.length > 1) {
+                formatted += ' (' + value.slice(1, 4);
+            }
+            if (value.length >= 5) {
+                formatted += ') ' + value.slice(4, 7);
+            }
+            if (value.length >= 8) {
+                formatted += '-' + value.slice(7, 9);
+            }
+            if (value.length >= 10) {
+                formatted += '-' + value.slice(9, 11);
+            }
+        }
+        
+        this.value = formatted;
+        
+        // Убираем ошибку при вводе, если номер полный
+        const digits = this.value.replace(/\D/g, '');
+        if (digits.length === 11) {
+            document.getElementById('phoneError').classList.remove('visible');
+            this.classList.remove('error');
+        }
+    });
+
+    // Улучшенная валидация телефона
+    function isValidPhone(value) {
+        const digits = value.replace(/\D/g, '');
+        // Проверяем: 11 цифр, начинается с 7
+        return digits.length === 11 && digits.startsWith('7');
+    }
+
+    // ==============================
+    // 6. ВАЛИДАЦИЯ И ОТПРАВКА ФОРМЫ В VK
+    // ==============================
+    const form = document.getElementById('contactForm');
+    const nameInput = document.getElementById('name');
+    const tariffSelect = document.getElementById('tariff');
+    const consentCheck = document.getElementById('consent');
+    const emailInput = document.getElementById('email-field');
+
+    // Элементы для ошибок
+    const nameError = document.getElementById('nameError');
+    const phoneError = document.getElementById('phoneError');
+    const methodError = document.getElementById('methodError');
+    const emailError = document.getElementById('emailError');
+    const tariffError = document.getElementById('tariffError');
+    const consentError = document.getElementById('consentError');
+    const successMessage = document.getElementById('successMessage');
+
+    // Вспомогательная функция для сброса ошибок
+    function clearErrors() {
+        document.querySelectorAll('.error-message').forEach(el => el.classList.remove('visible'));
+        document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+        successMessage.classList.remove('visible');
+    }
+
+    // Валидация email
+    function isValidEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    // ==========================================
+    // ОСНОВНОЙ ОБРАБОТЧИК ОТПРАВКИ ФОРМЫ
+    // ==========================================
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        let isValid = true;
+
+        // 1. Проверка имени
+        if (!nameInput.value.trim()) {
+            nameError.classList.add('visible');
+            nameInput.classList.add('error');
+            isValid = false;
+        }
+
+        // 2. Проверка телефона (полный номер, 11 цифр, начиная с 7)
+        if (!isValidPhone(phoneInput.value.trim())) {
+            phoneError.classList.add('visible');
+            phoneInput.classList.add('error');
+            isValid = false;
+        }
+
+        // 3. Проверка способа связи (выбран ли хоть один radio)
+        const selectedMethod = document.querySelector('input[name="contact_method"]:checked');
+        if (!selectedMethod) {
+            methodError.classList.add('visible');
+            isValid = false;
+        }
+
+        // 4. Проверка email (только если выбран способ "Почта")
+        if (selectedMethod && selectedMethod.value === 'email') {
+            if (!isValidEmail(emailInput.value.trim())) {
+                emailError.classList.add('visible');
+                emailInput.classList.add('error');
                 isValid = false;
             }
+        }
 
-            // 2. Телефон
-            if (!isValidPhone(phoneInput.value.trim())) {
-                phoneError.classList.add('visible');
-                phoneInput.classList.add('error');
-                isValid = false;
-            }
+        // 5. Проверка тарифа
+        if (!tariffSelect.value) {
+            tariffError.classList.add('visible');
+            tariffSelect.classList.add('error');
+            isValid = false;
+        }
 
-            // 3. Способ связи (выбран ли radio)
-            const selectedMethod = document.querySelector('input[name="contact_method"]:checked');
-            if (!selectedMethod) {
-                methodError.classList.add('visible');
-                isValid = false;
-            }
+        // 6. Проверка согласия на обработку данных
+        if (!consentCheck.checked) {
+            consentError.classList.add('visible');
+            isValid = false;
+        }
 
-            // 4. Почта (если выбран способ "Почта")
-            if (selectedMethod && selectedMethod.value === 'email') {
-                if (!isValidEmail(emailInput.value.trim())) {
-                    emailError.classList.add('visible');
-                    emailInput.classList.add('error');
-                    isValid = false;
-                }
-            }
+        // Если форма невалидна - прерываем выполнение
+        if (!isValid) {
+            return;
+        }
 
-            // 5. Тариф
-            if (!tariffSelect.value) {
-                tariffError.classList.add('visible');
-                tariffSelect.classList.add('error');
-                isValid = false;
-            }
+        // ==========================================
+        // ФОРМИРУЕМ ДАННЫЕ И ОТПРАВЛЯЕМ НА СЕРВЕР
+        // ==========================================
+        
+        // Собираем данные формы в объект
+        const formData = {
+            name: nameInput.value.trim(),
+            phone: phoneInput.value.trim(),
+            contact_method: selectedMethod.value,
+            email: selectedMethod.value === 'email' ? emailInput.value.trim() : '',
+            tariff: tariffSelect.value
+        };
 
-            // 6. Согласие
-            if (!consentCheck.checked) {
-                consentError.classList.add('visible');
-                isValid = false;
-            }
+        // Показываем пользователю, что пошла отправка (меняем текст кнопки)
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Отправка...';
+        submitButton.disabled = true;
+        submitButton.style.opacity = '0.7';
+        submitButton.style.cursor = 'not-allowed';
 
-            // Если всё ок — показываем успех
-            if (isValid) {
+        try {
+            // Отправляем запрос на серверную функцию Vercel
+            // ВАЖНО: убедитесь, что путь '/api/send-to-vk' совпадает с названием вашего файла в папке api/
+            const response = await fetch('/api/send-to-vk', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            // Парсим ответ от сервера
+            const result = await response.json();
+
+            // Если сервер ответил успехом
+            if (result.success) {
+                // Показываем сообщение об успешной отправке
                 successMessage.classList.add('visible');
+                
+                // Очищаем форму
                 form.reset();
-                // Сбрасываем состояние почты
+                
+                // Сбрасываем дополнительные состояния
                 emailField.classList.add('hidden-email');
                 emailField.removeAttribute('required');
-                // Убираем выделение ошибок, если они были
-                document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
-                // Сбрасываем radio (визуально)
-                radioMethods.forEach(r => r.checked = false);
-                // Очищаем поле телефона
                 phoneInput.value = '';
+                
+                // Сбрасываем radio-кнопки (визуально)
+                document.querySelectorAll('input[name="contact_method"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                
+                // Убираем все красные рамки с полей
+                document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+                
+                // Прокручиваем страницу к сообщению об успехе
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
                 // Через 8 секунд скрываем сообщение
                 setTimeout(() => {
                     successMessage.classList.remove('visible');
                 }, 8000);
+                
+            } else {
+                // Если сервер вернул ошибку
+                alert('Ошибка: ' + (result.error || 'Не удалось отправить заявку. Попробуйте позже.'));
             }
-        });
+            
+        } catch (error) {
+            // Если произошла сетевая ошибка или сервер недоступен
+            console.error('Ошибка сети или сервера:', error);
+            alert('Не удалось связаться с сервером. Проверьте подключение к интернету или попробуйте позже.');
+            
+        } finally {
+            // В любом случае возвращаем кнопку в исходное состояние
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+            submitButton.style.opacity = '1';
+            submitButton.style.cursor = 'pointer';
+        }
+    });
 
-        // Очистка ошибок при вводе
-        nameInput.addEventListener('input', function() {
-            if (this.value.trim()) {
-                nameError.classList.remove('visible');
-                this.classList.remove('error');
-            }
-        });
+    // ==============================
+    // 7. ОЧИСТКА ОШИБОК ПРИ ВВОДЕ (ДИНАМИЧЕСКАЯ)
+    // ==============================
+    
+    // При вводе имени - убираем ошибку
+    nameInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+            nameError.classList.remove('visible');
+            this.classList.remove('error');
+        }
+    });
 
-        tariffSelect.addEventListener('change', function() {
-            if (this.value) {
-                tariffError.classList.remove('visible');
-                this.classList.remove('error');
-            }
-        });
+    // При вводе телефона - убираем ошибку (уже реализовано в маске, 
+    // но дополнительно очищаем при фокусе)
+    phoneInput.addEventListener('focus', function() {
+        if (isValidPhone(this.value.trim())) {
+            phoneError.classList.remove('visible');
+            this.classList.remove('error');
+        }
+    });
 
-        consentCheck.addEventListener('change', function() {
-            if (this.checked) {
-                consentError.classList.remove('visible');
-            }
-        });
+    // При изменении тарифа - убираем ошибку
+    tariffSelect.addEventListener('change', function() {
+        if (this.value) {
+            tariffError.classList.remove('visible');
+            this.classList.remove('error');
+        }
+    });
 
-        emailInput.addEventListener('input', function() {
-            if (isValidEmail(this.value.trim())) {
+    // При отметке согласия - убираем ошибку
+    consentCheck.addEventListener('change', function() {
+        if (this.checked) {
+            consentError.classList.remove('visible');
+        }
+    });
+
+    // При вводе email - проверяем и убираем ошибку
+    emailInput.addEventListener('input', function() {
+        if (isValidEmail(this.value.trim())) {
+            emailError.classList.remove('visible');
+            this.classList.remove('error');
+        }
+    });
+
+    // При смене способа связи - убираем ошибку способа и очищаем email
+    radioMethods.forEach(radio => {
+        radio.addEventListener('change', function() {
+            methodError.classList.remove('visible');
+            
+            // Если выбрана не почта - скрываем поле email и чистим ошибки
+            if (this.value !== 'email') {
+                emailField.classList.add('hidden-email');
+                emailField.removeAttribute('required');
+                emailField.value = '';
                 emailError.classList.remove('visible');
-                this.classList.remove('error');
+                emailInput.classList.remove('error');
+            } else {
+                // Если выбрана почта - показываем поле
+                emailField.classList.remove('hidden-email');
+                emailField.setAttribute('required', 'required');
             }
         });
+    });
 
-        radioMethods.forEach(radio => {
-            radio.addEventListener('change', function() {
-                methodError.classList.remove('visible');
-                if (this.value !== 'email') {
-                    emailField.classList.add('hidden-email');
-                    emailField.removeAttribute('required');
-                    emailError.classList.remove('visible');
-                    emailInput.classList.remove('error');
-                } else {
-                    emailField.classList.remove('hidden-email');
-                    emailField.setAttribute('required', 'required');
-                }
-            });
-        });
-    </script>
+    // ==============================
+    // 8. БЛОКИРОВКА ПОВТОРНОЙ ОТПРАВКИ ПО DBLCLICK
+    // ==============================
+    form.addEventListener('dblclick', function(e) {
+        if (e.target.tagName === 'BUTTON' && e.target.type === 'submit') {
+            e.preventDefault();
+        }
+    });
+
+</script>
 
 </body>
 </html>
