@@ -44,7 +44,7 @@ export default async function handler(req, res) {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-                user_id: 'pudding2704',      // ваш числовой ID
+                user_id: '312306507',      // ваш числовой ID
                 message: message,
                 random_id: Math.floor(Math.random() * 2147483647),
                 access_token: 'vk1.a.-36omM8FL7-Q5qA2uT41kwlLDA-L02MlU7EUS4QZt17pNguK5FEILvLi6nYWiyphUsnnkRWsMdmUxHKtJS6A9B8ci1LMVuCDKCHXEfSxB642rPGM0UYd8AWqJfUQVh1FuS8cnLaPRNF_qo3CpPMw98BKbIRKE2XXV8LtvQC7uyXl8vWHxjJ5MUn1wHtKvBoMG2AdK3dL-NBajhgD5d7Zwg',  // токен сообщества
