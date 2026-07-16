@@ -21,7 +21,7 @@ ${contact_method === 'email' ? `📧 Email: ${email}` : ''}
     `.trim();
 
     // ID администратора, которому придёт сообщение (узнайте его ниже)
-    const adminUserId = 123456789; // ← ЗАМЕНИТЕ на свой ID ВКонтакте!
+    const adminUserId = 312306507; // ← ЗАМЕНИТЕ на свой ID ВКонтакте!
 
     // Отправляем запрос к VK API
     const vkResponse = await fetch('https://api.vk.com/method/messages.send', {
